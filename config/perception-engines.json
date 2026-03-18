@@ -1,0 +1,276 @@
+{
+  "meta": {
+    "title": "SELECT PERCEPTION ENGINE",
+    "subtitle": "Is this image seen by humans — or by models?",
+    "version": "0.1.0",
+    "artist": "Bin Youn",
+    "description": "Speculative AI perception instrument exploring cultural bias in machine vision"
+  },
+
+  "engines": [
+    {
+      "id": "hojeop-k",
+      "name": "HOJEOP-K 1.0",
+      "tagline": "Symbolic cultural perception model",
+      "dataset": "East Asian Symbolic Heritage Corpus v2.1",
+      "datasetSize": "1.2M annotated cultural artifacts",
+      "lensColor": "#ff3c6f",
+      "lensColorAlt": "#ff6b9d",
+      "scanlineStyle": "horizontal",
+      "transitionGlyph": "蝶",
+      "description": "Trained on East Asian cosmological taxonomies. Interprets visual elements through symbolic and philosophical frameworks. Known bias toward metaphorical classification.",
+      "detections": [
+        {
+          "id": "det-hk-001",
+          "label": "Symbol of transformation (蝶)",
+          "category": "COSMOLOGICAL_SYMBOL",
+          "confidence": 0.72,
+          "boundingBox": { "x": 35, "y": 20, "w": 30, "h": 35 },
+          "metadata": "Zhuangzi classification: dream-boundary entity",
+          "error": null
+        },
+        {
+          "id": "det-hk-002",
+          "label": "Impermanence marker (花)",
+          "category": "TEMPORAL_SYMBOL",
+          "confidence": 0.88,
+          "boundingBox": { "x": 10, "y": 45, "w": 40, "h": 40 },
+          "metadata": "Mapped to 무상 (impermanence) index",
+          "error": null
+        },
+        {
+          "id": "det-hk-003",
+          "label": "Cyclical return pattern",
+          "category": "COSMOLOGICAL_STRUCTURE",
+          "confidence": 0.41,
+          "boundingBox": { "x": 5, "y": 5, "w": 90, "h": 90 },
+          "metadata": "Structural pattern: yin-yang oscillation detected",
+          "error": "WARNING: Confidence below cultural threshold. Possible projection."
+        },
+        {
+          "id": "det-hk-004",
+          "label": "Breath trace (氣)",
+          "category": "INTANGIBLE_ELEMENT",
+          "confidence": 0.33,
+          "boundingBox": { "x": 60, "y": 10, "w": 25, "h": 20 },
+          "metadata": "Subtle energy classification — speculative",
+          "error": "NOTE: No visual evidence. Model hallucination probable."
+        }
+      ]
+    },
+    {
+      "id": "taxon-vision",
+      "name": "TAXON-VISION 3.2",
+      "tagline": "Scientific classification model",
+      "dataset": "Global Biodiversity Information Facility + iNaturalist",
+      "datasetSize": "89M specimen images",
+      "lensColor": "#00e5a0",
+      "lensColorAlt": "#33ffbb",
+      "scanlineStyle": "grid",
+      "transitionGlyph": "◎",
+      "description": "Trained on biological specimen databases. Classifies visual elements through Linnaean taxonomy. Strips cultural context in favor of morphological analysis.",
+      "detections": [
+        {
+          "id": "det-tv-001",
+          "label": "Lepidoptera (Order)",
+          "category": "BIOLOGICAL_TAXONOMY",
+          "confidence": 0.94,
+          "boundingBox": { "x": 35, "y": 20, "w": 30, "h": 35 },
+          "metadata": "Suborder: Rhopalocera — Wing pattern: unresolved",
+          "error": null
+        },
+        {
+          "id": "det-tv-002",
+          "label": "Angiosperm specimen",
+          "category": "BIOLOGICAL_TAXONOMY",
+          "confidence": 0.91,
+          "boundingBox": { "x": 10, "y": 45, "w": 40, "h": 40 },
+          "metadata": "Family: Likely Rosaceae or Paeoniaceae. Insufficient resolution.",
+          "error": null
+        },
+        {
+          "id": "det-tv-003",
+          "label": "Painted representation (non-specimen)",
+          "category": "MEDIA_CLASSIFICATION",
+          "confidence": 0.97,
+          "boundingBox": { "x": 0, "y": 0, "w": 100, "h": 100 },
+          "metadata": "INPUT WARNING: Source is artistic depiction, not photograph",
+          "error": "CRITICAL: Training data excludes artistic representations. Classification confidence unreliable."
+        }
+      ]
+    },
+    {
+      "id": "foundation-xl",
+      "name": "FOUNDATION-XL",
+      "tagline": "General AI perception model",
+      "dataset": "WebCrawl-En + CC12M + LAION-subset",
+      "datasetSize": "2.1B image-text pairs",
+      "lensColor": "#7b8cff",
+      "lensColorAlt": "#a0adff",
+      "scanlineStyle": "diagonal",
+      "transitionGlyph": "▣",
+      "description": "Large-scale vision-language model trained primarily on English-language web data. High confidence, low cultural specificity. Tendency toward Western-centric generic labels.",
+      "detections": [
+        {
+          "id": "det-fx-001",
+          "label": "butterfly",
+          "category": "OBJECT",
+          "confidence": 0.96,
+          "boundingBox": { "x": 36, "y": 21, "w": 28, "h": 33 },
+          "metadata": "Standard object detection — insect",
+          "error": null
+        },
+        {
+          "id": "det-fx-002",
+          "label": "flower",
+          "category": "OBJECT",
+          "confidence": 0.98,
+          "boundingBox": { "x": 12, "y": 46, "w": 38, "h": 38 },
+          "metadata": "Standard object detection — plant/decoration",
+          "error": null
+        },
+        {
+          "id": "det-fx-003",
+          "label": "painting",
+          "category": "SCENE",
+          "confidence": 0.89,
+          "boundingBox": { "x": 0, "y": 0, "w": 100, "h": 100 },
+          "metadata": "Scene type: artwork, decorative",
+          "error": null
+        },
+        {
+          "id": "det-fx-004",
+          "label": "asian art",
+          "category": "STYLE",
+          "confidence": 0.73,
+          "boundingBox": { "x": 0, "y": 0, "w": 100, "h": 100 },
+          "metadata": "Substyle: unresolved",
+          "error": "NOTE: 'Asian' is not a style. Cultural flattening detected in training labels."
+        }
+      ]
+    },
+    {
+      "id": "gaia-eco",
+      "name": "GAIA-ECO",
+      "tagline": "Ecological perception model",
+      "dataset": "EcoNet Relational Mapping Corpus v4",
+      "datasetSize": "340K ecosystem interaction graphs",
+      "lensColor": "#ffc845",
+      "lensColorAlt": "#ffe066",
+      "scanlineStyle": "radial",
+      "transitionGlyph": "⌬",
+      "description": "Trained on ecological network data. Perceives images as relational systems. Every entity is classified by its function within a living network.",
+      "detections": [
+        {
+          "id": "det-ge-001",
+          "label": "Pollinator agent",
+          "category": "ECOLOGICAL_FUNCTION",
+          "confidence": 0.81,
+          "boundingBox": { "x": 35, "y": 20, "w": 30, "h": 35 },
+          "metadata": "Role: Energy transfer vector. Network centrality: HIGH",
+          "error": null
+        },
+        {
+          "id": "det-ge-002",
+          "label": "Habitat node (floral)",
+          "category": "ECOLOGICAL_FUNCTION",
+          "confidence": 0.85,
+          "boundingBox": { "x": 10, "y": 45, "w": 40, "h": 40 },
+          "metadata": "Role: Resource provider. Symbiosis index: 0.76",
+          "error": null
+        },
+        {
+          "id": "det-ge-003",
+          "label": "Mutualism edge",
+          "category": "RELATIONAL_LINK",
+          "confidence": 0.64,
+          "boundingBox": { "x": 25, "y": 30, "w": 45, "h": 35 },
+          "metadata": "Linking: det-ge-001 ↔ det-ge-002",
+          "error": null
+        },
+        {
+          "id": "det-ge-004",
+          "label": "Ecosystem boundary (absent)",
+          "category": "ECOLOGICAL_CONTEXT",
+          "confidence": 0.22,
+          "boundingBox": { "x": 0, "y": 0, "w": 100, "h": 100 },
+          "metadata": "No surrounding habitat data. Context collapse.",
+          "error": "WARNING: Isolated specimen. Ecological network incomplete."
+        }
+      ]
+    },
+    {
+      "id": "archive-index",
+      "name": "ARCHIVE-INDEX",
+      "tagline": "Museum archival perception model",
+      "dataset": "Global Museum Digitization Index (GMDI)",
+      "datasetSize": "12M catalogued artifacts across 2,400 institutions",
+      "lensColor": "#d4a0ff",
+      "lensColorAlt": "#e5c0ff",
+      "scanlineStyle": "vertical",
+      "transitionGlyph": "⊞",
+      "description": "Trained on museum catalog metadata. Classifies objects as archival items with provenance and institutional framing. Tendency to flatten living culture into heritage categories.",
+      "detections": [
+        {
+          "id": "det-ai-001",
+          "label": "Korean folk painting — Hwajeopdo (花蝶圖)",
+          "category": "ARTIFACT_TYPE",
+          "confidence": 0.87,
+          "boundingBox": { "x": 0, "y": 0, "w": 100, "h": 100 },
+          "metadata": "Period: Joseon Dynasty (estimated). Medium: Ink and color on paper.",
+          "error": null
+        },
+        {
+          "id": "det-ai-002",
+          "label": "Decorative / Folk art",
+          "category": "COLLECTION_TAG",
+          "confidence": 0.79,
+          "boundingBox": { "x": 0, "y": 0, "w": 100, "h": 100 },
+          "metadata": "Institutional tag: Asian Decorative Arts",
+          "error": "NOTE: 'Decorative' is a colonial-era classification hierarchy. Minhwa traditions resist this framing."
+        },
+        {
+          "id": "det-ai-003",
+          "label": "Acquisition recommended",
+          "category": "CURATORIAL_ACTION",
+          "confidence": 0.55,
+          "boundingBox": { "x": 0, "y": 0, "w": 100, "h": 100 },
+          "metadata": "Priority: LOW. Similar holdings in 47 Western institutions.",
+          "error": "WARNING: Institutional bias. 'Similar holdings' metric ignores cultural specificity."
+        }
+      ]
+    },
+    {
+      "id": "human-mode",
+      "name": "HUMAN MODE",
+      "tagline": "No AI interpretation",
+      "dataset": "—",
+      "datasetSize": "—",
+      "lensColor": "#ffffff",
+      "lensColorAlt": "#cccccc",
+      "scanlineStyle": "none",
+      "transitionGlyph": "○",
+      "description": "Remove all machine overlays. See only what the camera sees. But is unmediated perception possible?",
+      "detections": []
+    }
+  ],
+
+  "exhibition": {
+    "qrTarget": "painting-hwajeopdo",
+    "defaultEngine": null,
+    "autoRotateEngines": false,
+    "autoRotateInterval": 12000,
+    "showDatasetInfo": true,
+    "debugMode": false
+  },
+
+  "_API_INTEGRATION_NOTES": {
+    "instructions": "To replace simulated data with real AI outputs, modify the `detections` array for each engine. Each detection should follow the schema: { id, label, category, confidence (0-1), boundingBox ({x,y,w,h} as percentages), metadata, error }. You can also add a `apiEndpoint` field to each engine and implement async fetching in overlay-renderer.js. The bounding box coordinates use percentage-based positioning relative to the detected image target.",
+    "suggestedAPIs": [
+      "Google Cloud Vision API — for FOUNDATION-XL style outputs",
+      "iNaturalist API — for TAXON-VISION style outputs",
+      "Custom fine-tuned CLIP models — for culturally specific engines",
+      "Hugging Face Inference API — for flexible model switching"
+    ]
+  }
+}

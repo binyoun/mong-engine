@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0a0a0c">
+  <title>SELECT PERCEPTION ENGINE</title>
+  <meta name="description" content="Speculative AI perception instrument — Bin Youn">
+
+  <!-- 
+    A-Frame (optional — uncomment for full WebXR support)
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    
+    8th Wall (optional — add your API key for real image tracking)
+    <script src="https://apps.8thwall.com/xrweb?appKey=YOUR_KEY"></script>
+
+    MindAR (alternative lightweight image tracking)
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  -->
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ==================== CAMERA VIEWPORT ==================== -->
+  <div id="camera-viewport"></div>
+
+  <!-- ==================== LENS TRANSITION OVERLAY ==================== -->
+  <div id="lens-transition">
+    <div class="lens-glass"></div>
+    <div class="lens-scanline"></div>
+    <div class="transition-glyph"></div>
+  </div>
+
+  <!-- ==================== LANDING SCREEN ==================== -->
+  <div id="landing-screen">
+    <h1 class="landing-title">Select Perception Engine</h1>
+    <p class="landing-subtitle">Is this image seen by humans — or by models?</p>
+    <div id="engine-list" class="engine-select-list" role="radiogroup" aria-label="Perception engine selection">
+      <!-- Populated by ui-controller.js -->
+    </div>
+  </div>
+
+  <!-- ==================== AR HUD ==================== -->
+  <div id="ar-hud">
+    <!-- Detection overlay layer -->
+    <div id="detection-layer"></div>
+
+    <!-- Top bar: engine info -->
+    <div id="hud-top-bar">
+      <div>
+        <div class="hud-engine-label"></div>
+        <div class="hud-dataset-label"></div>
+      </div>
+      <button class="hud-back-btn">← SELECT</button>
+    </div>
+
+    <!-- Bottom bar: engine quick-switcher -->
+    <div id="hud-bottom-bar">
+      <div id="engine-switcher" class="engine-switcher" role="tablist" aria-label="Switch perception engine">
+        <!-- Populated by ui-controller.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== APPLICATION ==================== -->
+  <script type="module" src="js/app.js"></script>
+
+</body>
+</html>
