@@ -1,0 +1,74 @@
+{
+  "layers": {
+    "western": {
+      "color": "#e8e8e8",
+      "name": "WESTERN",
+      "prefix": "W"
+    },
+    "korean": {
+      "color": "#4a9c6f",
+      "name": "KOREAN 한국",
+      "prefix": "KR"
+    },
+    "vietnamese": {
+      "color": "#c84b31",
+      "name": "VIET 越南",
+      "prefix": "VN"
+    },
+    "chinese": {
+      "color": "#d4a017",
+      "name": "CHINESE 中文",
+      "prefix": "ZH"
+    }
+  },
+  "candidates": {
+    "western": [
+      "a lotus or water lily flower",
+      "a blooming flower with petals",
+      "a pond or still water surface",
+      "a flower stem or leaf",
+      "a decorative painted plant",
+      "a reflection on water",
+      "an organic botanical shape",
+      "a flower bud",
+      "floating leaves on water",
+      "a nature painting detail"
+    ],
+    "korean": [
+      "연꽃 — a lotus flower symbolizing purity and enlightenment in Korean Buddhist painting",
+      "수련 — a water lily resting on a still pond in Korean nature painting",
+      "연못 — a lotus pond as sacred space of stillness in Korean traditional art",
+      "꽃잎 — flower petals representing the impermanence of beauty in Korean aesthetics",
+      "물 — water as mirror and metaphor for the self in Korean painting",
+      "연잎 — a lotus leaf floating on still water, symbol of non-attachment",
+      "무상 — the impermanence of blooming and fading, a core theme in Korean painting",
+      "생명 — life force expressed through the living forms of flowers and water",
+      "고요 — stillness, the quality of a pond that reflects but does not grasp",
+      "자연 — nature as a living teacher in Korean Confucian and Buddhist art"
+    ],
+    "vietnamese": [
+      "hoa sen — the lotus, Vietnam's national flower, symbol of purity and resilience",
+      "ao sen — a lotus pond, a sacred and domestic space in Vietnamese village life",
+      "hoa súng — a water lily floating on still water in Vietnamese landscape",
+      "bông hoa — a flower in bloom, a symbol of beauty and transience in Vietnamese poetry",
+      "mặt nước — the surface of water, a mirror for the sky and the self",
+      "lá sen — a lotus leaf, used in Vietnamese folk medicine and spiritual ritual",
+      "vô thường — impermanence, the blooming and falling of every flower",
+      "tĩnh lặng — stillness, the quality of a pond at dawn in Vietnamese nature poetry",
+      "đầm lầy — a wetland or marshy pond, a natural habitat in Vietnamese landscape",
+      "thanh tịnh — purity, the quality of the lotus rising unstained from muddy water"
+    ],
+    "chinese": [
+      "荷花 — lotus flower, one of the four noble plants in classical Chinese painting",
+      "水蓮 — water lily on a still pond, motif in Song Dynasty academic painting",
+      "荷塘 — a lotus pond, the subject of classical Chinese literati meditation and poetry",
+      "荷葉 — lotus leaf, a formal element in Chinese bird-and-flower gongbi tradition",
+      "水波 — water ripples, a technical subject in classical Chinese ink painting",
+      "出淤泥而不染 — the lotus rising unstained, the central Confucian virtue metaphor",
+      "靜 — stillness, the quality sought in Chinese literati painting and landscape",
+      "花鳥圖 — flower-and-bird painting, the classical Chinese genre this image belongs to",
+      "夢 — dream, the liminal state between forms, the question this painting asks",
+      "氣 — vital energy flowing through the brushwork and living forms of the painting"
+    ]
+  }
+}

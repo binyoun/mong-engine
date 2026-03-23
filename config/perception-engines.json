@@ -241,6 +241,20 @@
       ]
     },
     {
+      "id": "mong-engine",
+      "name": "夢 — Am I the Butterfly?",
+      "tagline": "호접지몽 · 胡蝶之夢 · Four cultural lenses, one painting",
+      "dataset": "YOLO (COCO) + CLIP (LAION-400M) — live browser inference",
+      "datasetSize": "Runs locally, no server",
+      "lensColor": "#d4a017",
+      "lensColorAlt": "#e8c040",
+      "scanlineStyle": "diagonal",
+      "transitionGlyph": "夢",
+      "type": "multi-layer",
+      "description": "Inspired by 호접지몽 (胡蝶之夢) — Zhuangzi's butterfly dream. Are you the dreamer, or the butterfly? YOLO detects each element. CLIP asks four traditions what they see. Western, Korean, Vietnamese, and Chinese labels appear simultaneously over the same regions. The training data speaks.",
+      "detections": []
+    },
+    {
       "id": "human-mode",
       "name": "HUMAN MODE",
       "tagline": "No AI interpretation",
