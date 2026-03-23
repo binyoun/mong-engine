@@ -627,6 +627,30 @@ html, body {
   display: block;
 }
 
+/* ---- AR BUTTERFLY ---- */
+#butterfly-ar {
+  position: absolute;
+  top: 22%;
+  left: 50%;
+  font-size: 72px;
+  color: rgba(212, 160, 23, 0.88);
+  text-shadow:
+    0 0 20px rgba(212, 160, 23, 0.7),
+    0 0 60px rgba(212, 160, 23, 0.3);
+  pointer-events: none;
+  z-index: 20;
+  animation: butterflyDrift 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes butterflyDrift {
+  0%   { transform: translate(-50%, 0)               rotate(-4deg) scale(1);    }
+  25%  { transform: translate(calc(-50% + 18px), -22px) rotate(3deg)  scale(1.04); }
+  50%  { transform: translate(calc(-50% - 12px), -14px) rotate(-2deg) scale(0.96); }
+  75%  { transform: translate(calc(-50% + 8px),  -28px) rotate(4deg)  scale(1.02); }
+  100% { transform: translate(-50%, 0)               rotate(-4deg) scale(1);    }
+}
+
 /* ---- AMBIENT ANIMATION ---- */
 @keyframes subtlePulse {
   0%, 100% { opacity: 0.6; }
