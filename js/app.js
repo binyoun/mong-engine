@@ -20,9 +20,10 @@ class PerceptionEngineApp {
     this.ui          = null;
     this.targetInfo  = null;
     this._activeEngine = null;
-    this._clipEngine   = null;
-    this._mongLabels   = null;
-    this._butterfly    = new ButterflyAR();
+    this._clipEngine    = null;
+    this._mongLabels    = null;
+    this._butterfly     = new ButterflyAR();
+    this._cameraStarted = false;
   }
 
   /**
@@ -51,17 +52,9 @@ class PerceptionEngineApp {
     this.ui.buildLandingScreen();
     this.ui.buildEngineSwitcher();
 
-    // 4. Initialize camera — non-blocking so the engine list is already visible
+    // 4. Set up camera object but don't start yet —
+    //    camera.start() is called on first engine selection (requires user gesture on mobile)
     this.camera = new CameraManager(document.getElementById('camera-viewport'));
-    this.camera.init()
-      .then(ready => {
-        console.log(`[SPE] Camera: ${ready ? 'active' : 'fallback mode'}`);
-        // If 夢 ENGINE was selected before camera finished loading, attach butterfly now
-        if (this._activeEngine?.type === 'multi-layer' && this.camera.anchor) {
-          this._butterfly.attach(this.camera.anchor.group);
-        }
-      })
-      .catch(err => console.warn('[SPE] Camera init error (tracking unavailable):', err));
 
     // 5. Set up back button
     document.querySelector('.hud-back-btn').addEventListener('click', () => {
@@ -69,7 +62,7 @@ class PerceptionEngineApp {
       this.ui.returnToLanding();
     });
 
-    // 6. Real MindAR image target tracking
+    // 6. Wire tracking callbacks (safe to register before start())
     const scanPrompt = document.getElementById('scanning-prompt');
 
     this.camera.onTargetFound((target) => {
@@ -147,6 +140,19 @@ class PerceptionEngineApp {
     console.log(`[SPE] Engine activated: ${engine.name}`);
     this._activeEngine = engine;
     this.overlay.clearDetections(false);
+
+    // Start camera on first engine selection (user gesture satisfies mobile permission)
+    if (!this._cameraStarted) {
+      this._cameraStarted = true;
+      this.camera.init()
+        .then(() => {
+          console.log('[SPE] Camera active');
+          if (this._activeEngine?.type === 'multi-layer' && this.camera.anchor) {
+            this._butterfly.attach(this.camera.anchor.group);
+          }
+        })
+        .catch(err => console.error('[SPE] Camera failed:', err));
+    }
 
     if (engine.type === 'multi-layer') {
       // Attach AR butterfly to painting anchor
