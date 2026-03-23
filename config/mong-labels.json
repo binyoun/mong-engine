@@ -21,6 +21,11 @@
       "prefix": "ZH"
     }
   },
+  "zones": [
+    { "id": "zone-flowers", "hint": "flowers",  "x": 5, "y": 5,  "w": 90, "h": 50 },
+    { "id": "zone-water",   "hint": "water",    "x": 5, "y": 50, "w": 90, "h": 45 }
+  ],
+
   "candidates": {
     "western": [
       "a lotus or water lily flower",
