@@ -68,11 +68,11 @@ html, body {
 /* ---- STATUS ---- */
 #mong-status {
   position: fixed;
-  bottom: 24px;
+  bottom: 32px;
   left: 50%;
   transform: translateX(-50%);
-  color: rgba(212, 160, 23, 0.8);
-  font-size: 10px;
+  color: rgba(212, 160, 23, 0.9);
+  font-size: 14px;
   letter-spacing: 0.18em;
   text-align: center;
   pointer-events: none;
@@ -92,25 +92,25 @@ html, body {
 }
 
 .title-cjk {
-  font-size: 28px;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 48px;
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1;
   letter-spacing: 0.05em;
 }
 
 .title-sub {
-  font-size: 9px;
-  color: rgba(255, 255, 255, 0.35);
-  letter-spacing: 0.12em;
-  margin-top: 4px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.1em;
+  margin-top: 6px;
   text-transform: uppercase;
 }
 
 .title-ref {
-  font-size: 8px;
-  color: rgba(212, 160, 23, 0.4);
+  font-size: 11px;
+  color: rgba(212, 160, 23, 0.6);
   letter-spacing: 0.1em;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 /* ---- AR BUTTERFLY ---- */
@@ -174,18 +174,19 @@ html, body {
 
 .detection-label-text {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 400;
   color: var(--lens-color);
   letter-spacing: 0.03em;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  text-shadow: 0 1px 6px rgba(0,0,0,0.95), 0 0 20px rgba(0,0,0,0.8);
 }
 
 .detection-confidence {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 300;
   color: var(--text-secondary);
   letter-spacing: 0.02em;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.9);
 }
 
 .detection-metadata {
@@ -232,12 +233,12 @@ html, body {
 .layer-badge {
   position: absolute;
   top: -1px; left: -1px;
-  font-size: 7px;
+  font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.08em;
-  padding: 1px 4px;
+  padding: 2px 6px;
   border: 1px solid currentColor;
-  background: rgba(10, 10, 12, 0.75);
+  background: rgba(10, 10, 12, 0.85);
   line-height: 1.4;
 }
 
@@ -259,8 +260,8 @@ html, body {
 }
 
 .detection-box.multi-layer .detection-label-text {
-  font-size: 9px;
-  max-width: 160px;
+  font-size: 12px;
+  max-width: 240px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
