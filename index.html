@@ -6,80 +6,30 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#0a0a0c">
-  <title>SELECT PERCEPTION ENGINE</title>
-  <meta name="description" content="Speculative AI perception instrument — Bin Youn">
-
-  <!--
-    MindAR image tracking is loaded dynamically by camera-manager.js.
-    No manual script tag needed here.
-
-    IMPORTANT — before deploying, compile your painting image into targets.mind:
-    1. Go to: https://hiukim.github.io/mind-ar-js-doc/tools/compile/
-    2. Upload your painting image
-    3. Download targets.mind
-    4. Place targets.mind in the project root (same folder as index.html)
-  -->
-
+  <title>夢</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- ==================== CAMERA VIEWPORT ==================== -->
+  <!-- Camera feed -->
   <div id="camera-viewport"></div>
 
-  <!-- ==================== LENS TRANSITION OVERLAY ==================== -->
-  <div id="lens-transition">
-    <div class="lens-glass"></div>
-    <div class="lens-scanline"></div>
-    <div class="transition-glyph"></div>
+  <!-- Detection overlays -->
+  <div id="detection-layer"></div>
+
+  <!-- 33-second reveal bar -->
+  <div id="reveal-bar"></div>
+
+  <!-- Status line (ANALYZING / TAP TO RE-ANALYZE etc.) -->
+  <div id="mong-status"></div>
+
+  <!-- Corner title -->
+  <div id="corner-title">
+    <div class="title-cjk">夢</div>
+    <div class="title-sub">Am I the Butterfly?</div>
+    <div class="title-ref">三十三天</div>
   </div>
 
-  <!-- ==================== LANDING SCREEN ==================== -->
-  <div id="landing-screen">
-    <h1 class="landing-title">Select Perception Engine</h1>
-    <p class="landing-subtitle">Is this image seen by humans — or by models?</p>
-    <div id="engine-list" class="engine-select-list" role="radiogroup" aria-label="Perception engine selection">
-      <!-- Populated by ui-controller.js -->
-    </div>
-  </div>
-
-  <!-- ==================== 夢 ENGINE STATUS ==================== -->
-  <div id="mong-status" style="
-    display:block; opacity:0; position:fixed; top:50%; left:50%;
-    transform:translate(-50%,-50%);
-    color:rgba(212,160,23,0.85); font-size:11px; letter-spacing:0.15em;
-    text-align:center; pointer-events:none; z-index:60;
-    font-family:'IBM Plex Mono',monospace;
-    transition: opacity 600ms ease;
-    text-shadow: 0 0 20px rgba(212,160,23,0.4);
-  "></div>
-
-  <!-- ==================== SCANNING PROMPT ==================== -->
-
-  <!-- ==================== AR HUD ==================== -->
-  <div id="ar-hud">
-    <!-- Detection overlay layer -->
-    <div id="detection-layer"></div>
-
-    <!-- Top bar: engine info -->
-    <div id="hud-top-bar">
-      <div>
-        <div class="hud-engine-label"></div>
-        <div class="hud-dataset-label"></div>
-      </div>
-      <button class="hud-back-btn">← SELECT</button>
-    </div>
-
-    <!-- Bottom bar: engine quick-switcher -->
-    <div id="hud-bottom-bar">
-      <div id="engine-switcher" class="engine-switcher" role="tablist" aria-label="Switch perception engine">
-        <!-- Populated by ui-controller.js -->
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== APPLICATION ==================== -->
   <script type="module" src="js/app.js"></script>
-
 </body>
 </html>

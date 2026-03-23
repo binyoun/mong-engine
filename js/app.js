@@ -1,197 +1,180 @@
 /**
  * app.js
- * 夢 ENGINE — Main Application
+ * 夢 ENGINE — 호접지몽 (胡蝶之夢)
+ *
+ * Camera opens immediately.
+ * After 33 seconds (三十三天 — the 33 Heavens of Buddhist cosmology),
+ * the AI's interpretation reveals itself over the painting.
+ * Tap to toggle between seeing and not seeing.
  */
 
-import { CameraManager } from './camera-manager.js';
+import { CameraManager }  from './camera-manager.js';
 import { OverlayRenderer } from './overlay-renderer.js';
-import { UIController } from './ui-controller.js';
-import { ClipEngine } from './clip-engine.js';
-import { ButterflyAR } from './butterfly-ar.js';
+import { ClipEngine }      from './clip-engine.js';
+import { ButterflyAR }     from './butterfly-ar.js';
+
+const REVEAL_DELAY_MS = 33000; // 三十三天
 
 class MongEngineApp {
   constructor() {
-    this.config         = null;
-    this.camera         = null;
-    this.overlay        = null;
-    this.ui             = null;
-    this._activeEngine  = null;
-    this._clipEngine    = null;
-    this._mongLabels    = null;
-    this._butterfly     = new ButterflyAR();
-    this._cameraStarted = false;
+    this.camera       = new CameraManager(document.getElementById('camera-viewport'));
+    this.overlay      = new OverlayRenderer(document.getElementById('detection-layer'));
+    this.butterfly    = new ButterflyAR();
+    this._clipEngine  = null;
+    this._labels      = null;
+    this._config      = null;
+    this._revealed    = false;
+    this._visible     = false;  // overlays currently showing
   }
 
   async init() {
-    console.log('[夢] Initializing…');
+    // Load config + labels in parallel
+    [this._config, this._labels] = await Promise.all([
+      this._fetchJSON('./config/perception-engines.json'),
+      this._fetchJSON('./config/mong-labels.json'),
+    ]);
 
-    this.config = await this._loadConfig();
-    if (!this.config) { console.error('[夢] Config load failed.'); return; }
+    // Start camera immediately — requires user gesture on mobile,
+    // so we attach a one-time tap listener first
+    await this._waitForFirstTap();
+    await this._startCamera();
 
-    this.overlay = new OverlayRenderer(document.getElementById('detection-layer'));
+    // Start 33-second countdown
+    this._startCountdown();
 
-    this.ui = new UIController({
-      engines: this.config.engines,
-      onEngineSelect: (engine) => this._onEngineActivated(engine),
-    });
-    this.ui.buildLandingScreen();
-    this.ui.buildEngineSwitcher();
+    // Tap to toggle after reveal
+    document.addEventListener('click', () => this._onTap());
 
-    this.camera = new CameraManager(document.getElementById('camera-viewport'));
-
-    // Back button
-    document.querySelector('.hud-back-btn').addEventListener('click', () => {
-      this.overlay.clearDetections();
-      this._butterfly.detach();
-      this.ui.returnToLanding();
-      this._activeEngine = null;
-    });
-
-    // Tap anywhere on the viewport to re-analyze
-    document.getElementById('camera-viewport').addEventListener('click', () => {
-      if (this._activeEngine?.type === 'multi-layer') this._runMongAnalysis();
-    });
-
-    // Pre-load CLIP in background
+    // Pre-load CLIP in background for live re-analysis
     this._preloadClip();
-
-    console.log('[夢] Ready.');
   }
 
-  // ─── Engine activation ────────────────────────────────────────────────────
+  // ─── Camera ───────────────────────────────────────────────────────────────
 
-  _onEngineActivated(engine) {
-    console.log(`[夢] Engine: ${engine.name}`);
-    this._activeEngine = engine;
-    this.overlay.clearDetections(false);
-    this._butterfly.detach();
-
-    if (!this._cameraStarted) {
-      this._cameraStarted = true;
-      this._startCamera(engine);
-    } else {
-      this._applyEngine(engine);
-    }
+  _waitForFirstTap() {
+    // Show a minimal prompt so the viewer knows to tap
+    this._setStatus('TAP TO BEGIN');
+    return new Promise(resolve => {
+      document.addEventListener('click', resolve, { once: true });
+    });
   }
 
-  async _startCamera(engine) {
-    this._setStatus('STARTING CAMERA…');
+  async _startCamera() {
+    this._setStatus('');
     try {
       await this.camera.init();
-      this._setStatus('');
-      this._applyEngine(engine);
     } catch (err) {
       console.error('[夢] Camera failed:', err);
       this._setStatus('CAMERA UNAVAILABLE');
     }
   }
 
-  _applyEngine(engine) {
-    if (engine.type === 'multi-layer') {
-      this._butterfly.attach(document.getElementById('ar-hud'));
-      // Show precomputed results instantly — no model download needed
-      if (engine.precomputedZones && this._mongLabels) {
-        this.overlay.renderMultiLayerDetections(engine.precomputedZones, this._mongLabels.layers);
-        this._setStatus('TAP TO RE-ANALYZE WITH CLIP', 4000);
-      } else {
-        this._runMongAnalysis();
-      }
+  // ─── 33-second countdown ──────────────────────────────────────────────────
+
+  _startCountdown() {
+    const bar = document.getElementById('reveal-bar');
+    if (bar) {
+      // Trigger CSS transition: width goes from 100% → 0% over 33s
+      requestAnimationFrame(() => {
+        bar.style.transition = `width ${REVEAL_DELAY_MS}ms linear`;
+        bar.style.width = '0%';
+      });
     }
-    // HUMAN MODE — camera only, no overlays needed
+
+    setTimeout(() => {
+      this._revealed = true;
+      this._show();
+    }, REVEAL_DELAY_MS);
   }
 
-  // ─── 夢 Analysis ──────────────────────────────────────────────────────────
+  // ─── Reveal / toggle ──────────────────────────────────────────────────────
 
-  async _runMongAnalysis() {
+  _onTap() {
+    if (!this._revealed) return;  // ignore taps before reveal
+    if (this._visible) {
+      this._hide();
+    } else {
+      // Re-analyze if CLIP is ready, otherwise show precomputed
+      if (this._clipEngine?.isReady) {
+        this._runClipAnalysis();
+      } else {
+        this._show();
+      }
+    }
+  }
+
+  _show() {
+    this._visible = true;
+    this.butterfly.attach(document.getElementById('detection-layer').parentElement);
+    this._showPrecomputed();
+  }
+
+  _hide() {
+    this._visible = false;
+    this.butterfly.detach();
+    this.overlay.clearDetections(false);
+  }
+
+  _showPrecomputed() {
+    const engine = this._config?.engines.find(e => e.type === 'multi-layer');
+    if (engine?.precomputedZones && this._labels) {
+      this.overlay.clearDetections(false);
+      this.overlay.renderMultiLayerDetections(engine.precomputedZones, this._labels.layers);
+    }
+  }
+
+  // ─── CLIP live analysis ───────────────────────────────────────────────────
+
+  async _runClipAnalysis() {
     const video = this.camera.getVideo();
     if (!video) return;
 
-    if (!this._clipEngine?.isReady) {
-      this._setStatus('夢 — LOADING MODEL…');
-      return;
-    }
-
     this._setStatus('夢 — ANALYZING…');
     this.overlay.clearDetections(false);
+    this.butterfly.attach(document.getElementById('detection-layer').parentElement);
+    this._visible = true;
 
     try {
-      const result = await this._clipEngine.analyze(video, this._mongLabels);
-      if (this._activeEngine?.type === 'multi-layer') {
-        this.overlay.renderMultiLayerDetections(result.regions, this._mongLabels.layers);
-      }
-      this._setStatus('TAP TO RE-ANALYZE', 3000);
+      const result = await this._clipEngine.analyze(video, this._labels);
+      this.overlay.renderMultiLayerDetections(result.regions, this._labels.layers);
+      this._setStatus('', 0);
     } catch (err) {
       console.error('[夢] Analysis failed:', err);
-      this._setStatus('ANALYSIS FAILED — TAP TO RETRY');
+      this._setStatus('');
+      this._showPrecomputed();
     }
   }
 
   async _preloadClip() {
     try {
-      const res = await fetch('./config/mong-labels.json');
-      this._mongLabels = await res.json();
-
       this._clipEngine = new ClipEngine();
       await this._clipEngine.load((p) => {
         console.log(`[夢] ${p.stage} ${Math.round(p.progress * 100)}%`);
-        if (this._activeEngine?.type === 'multi-layer') {
-          this._setStatus(`夢 — ${p.stage}`);
-        }
       });
-
-      console.log('[夢] CLIP ready');
-      // If 夢 ENGINE already active, run analysis now that models are loaded
-      if (this._activeEngine?.type === 'multi-layer') this._runMongAnalysis();
+      console.log('[夢] CLIP ready — tap to re-analyze with live inference');
     } catch (err) {
       console.warn('[夢] CLIP pre-load failed:', err);
     }
   }
 
-  // ─── Status display ───────────────────────────────────────────────────────
+  // ─── Helpers ──────────────────────────────────────────────────────────────
 
-  _setStatus(text, clearAfterMs = 0) {
+  _setStatus(text) {
     const el = document.getElementById('mong-status');
     if (!el) return;
-    el.textContent  = text;
+    el.textContent   = text;
     el.style.opacity = text ? '1' : '0';
-    if (clearAfterMs) setTimeout(() => { el.textContent = ''; el.style.opacity = '0'; }, clearAfterMs);
   }
 
-  // ─── Config ───────────────────────────────────────────────────────────────
-
-  async _loadConfig() {
+  async _fetchJSON(url) {
     try {
-      const res = await fetch('./config/perception-engines.json');
+      const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.json();
     } catch (err) {
-      console.error('[夢] Config load failed:', err);
-      return this._fallbackConfig();
+      console.warn(`[夢] Failed to load ${url}:`, err);
+      return null;
     }
-  }
-
-  _fallbackConfig() {
-    return {
-      meta: { title: '夢 ENGINE' },
-      engines: [
-        {
-          id: 'mong-engine', name: '夢 — Am I the Butterfly?',
-          tagline: '호접지몽 · Four cultural lenses',
-          dataset: 'CLIP (LAION-400M)', datasetSize: 'Browser inference',
-          lensColor: '#d4a017', lensColorAlt: '#e8c040',
-          scanlineStyle: 'diagonal', transitionGlyph: '夢',
-          type: 'multi-layer', detections: [],
-        },
-        {
-          id: 'human-mode', name: 'HUMAN MODE',
-          tagline: 'No AI interpretation',
-          dataset: '—', datasetSize: '—',
-          lensColor: '#ffffff', lensColorAlt: '#cccccc',
-          scanlineStyle: 'none', transitionGlyph: '○',
-          detections: [],
-        },
-      ],
-    };
   }
 }
 
