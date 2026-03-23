@@ -89,7 +89,13 @@ class MongEngineApp {
   _applyEngine(engine) {
     if (engine.type === 'multi-layer') {
       this._butterfly.attach(document.getElementById('ar-hud'));
-      this._runMongAnalysis();
+      // Show precomputed results instantly — no model download needed
+      if (engine.precomputedZones && this._mongLabels) {
+        this.overlay.renderMultiLayerDetections(engine.precomputedZones, this._mongLabels.layers);
+        this._setStatus('TAP TO RE-ANALYZE WITH CLIP', 4000);
+      } else {
+        this._runMongAnalysis();
+      }
     }
     // HUMAN MODE — camera only, no overlays needed
   }

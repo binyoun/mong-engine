@@ -20,7 +20,29 @@
       "transitionGlyph": "夢",
       "type": "multi-layer",
       "description": "Inspired by 호접지몽 (胡蝶之夢) — Zhuangzi's butterfly dream. CLIP asks four traditions what they see. Western, Korean, Vietnamese, and Chinese labels appear simultaneously. The training data speaks.",
-      "detections": []
+      "detections": [],
+      "precomputedZones": [
+        {
+          "id": "zone-flowers",
+          "boundingBox": { "x": 5, "y": 5, "w": 90, "h": 50 },
+          "layers": {
+            "western":    { "label": "a blooming flower with petals",                                          "confidence": 0.61 },
+            "korean":     { "label": "모란 — a peony flower symbolizing wealth, prosperity, and feminine beauty", "confidence": 0.54 },
+            "vietnamese": { "label": "hoa mẫu đơn — a peony flower symbolizing feminine grace and noble beauty", "confidence": 0.49 },
+            "chinese":    { "label": "牡丹 — peony, the queen of flowers, symbol of riches and honor",           "confidence": 0.57 }
+          }
+        },
+        {
+          "id": "zone-water",
+          "boundingBox": { "x": 5, "y": 50, "w": 90, "h": 45 },
+          "layers": {
+            "western":    { "label": "a pond or still water surface",                                           "confidence": 0.58 },
+            "korean":     { "label": "연못 — a lotus pond as sacred space of stillness in Korean traditional art","confidence": 0.51 },
+            "vietnamese": { "label": "ao sen — a lotus pond, a sacred and domestic space in Vietnamese village life","confidence": 0.47 },
+            "chinese":    { "label": "荷塘 — a lotus pond, the subject of classical Chinese literati meditation",  "confidence": 0.55 }
+          }
+        }
+      ]
     },
     {
       "id": "human-mode",
