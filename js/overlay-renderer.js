@@ -10,7 +10,8 @@
 export class OverlayRenderer {
   constructor(detectionLayerEl) {
     this.layer = detectionLayerEl;
-    this.activeBoxes = [];
+    this.activeBoxes = [];       // { el, detection } pairs
+    this._activeEngine = null;
     this._animationFrame = null;
   }
 
@@ -21,6 +22,7 @@ export class OverlayRenderer {
    */
   renderDetections(engine, targetInfo) {
     this.clearDetections();
+    this._activeEngine = engine;
 
     if (!engine.detections || engine.detections.length === 0) {
       // HUMAN MODE: no overlays
@@ -34,7 +36,7 @@ export class OverlayRenderer {
       setTimeout(() => {
         const box = this._createDetectionBox(det, lensColor, targetInfo);
         this.layer.appendChild(box);
-        this.activeBoxes.push(box);
+        this.activeBoxes.push({ el: box, detection: det });
 
         // Trigger visibility after DOM insertion
         requestAnimationFrame(() => {
@@ -47,8 +49,39 @@ export class OverlayRenderer {
   }
 
   /**
+   * Called every frame by app.js while tracking is active.
+   * Repositions all visible boxes to follow the painting in real time.
+   */
+  repositionBoxes(targetInfo) {
+    this.activeBoxes.forEach(({ el, detection }) => {
+      const pos = this._calcPosition(detection.boundingBox, targetInfo.dimensions);
+      el.style.left   = `${pos.left}%`;
+      el.style.top    = `${pos.top}%`;
+      el.style.width  = `${pos.width}%`;
+      el.style.height = `${pos.height}%`;
+    });
+  }
+
+  /**
    * Create a single detection box element
    */
+  /**
+   * Compute pixel-percentage position of a bounding box relative to the
+   * tracked target rect. targetDimensions has { x, y, width, height } in
+   * viewport-% (from real tracking) or just { width, height } (legacy sim).
+   */
+  _calcPosition(boundingBox, targetDimensions) {
+    const td = targetDimensions;
+    const originX = td.x !== undefined ? td.x : (100 - td.width) / 2;
+    const originY = td.y !== undefined ? td.y : (100 - td.height) / 2;
+    return {
+      left:   originX + (boundingBox.x / 100) * td.width,
+      top:    originY + (boundingBox.y / 100) * td.height,
+      width:  (boundingBox.w / 100) * td.width,
+      height: (boundingBox.h / 100) * td.height,
+    };
+  }
+
   _createDetectionBox(detection, lensColor, targetInfo) {
     const box = document.createElement('div');
     box.className = 'detection-box';
@@ -56,20 +89,11 @@ export class OverlayRenderer {
     box.style.setProperty('--lens-color', lensColor);
     box.style.borderColor = lensColor;
 
-    // Position from bounding box percentages
-    // Offset relative to target dimensions
-    const offsetX = (100 - targetInfo.dimensions.width) / 2;
-    const offsetY = (100 - targetInfo.dimensions.height) / 2;
-
-    const left = offsetX + (detection.boundingBox.x / 100) * targetInfo.dimensions.width;
-    const top = offsetY + (detection.boundingBox.y / 100) * targetInfo.dimensions.height;
-    const width = (detection.boundingBox.w / 100) * targetInfo.dimensions.width;
-    const height = (detection.boundingBox.h / 100) * targetInfo.dimensions.height;
-
-    box.style.left = `${left}%`;
-    box.style.top = `${top}%`;
-    box.style.width = `${width}%`;
-    box.style.height = `${height}%`;
+    const pos = this._calcPosition(detection.boundingBox, targetInfo.dimensions);
+    box.style.left   = `${pos.left}%`;
+    box.style.top    = `${pos.top}%`;
+    box.style.width  = `${pos.width}%`;
+    box.style.height = `${pos.height}%`;
 
     // Corner bracket colors
     box.style.setProperty('--lens-color', lensColor);
@@ -138,16 +162,17 @@ export class OverlayRenderer {
    */
   clearDetections(animate = true) {
     if (animate) {
-      this.activeBoxes.forEach((box, i) => {
+      this.activeBoxes.forEach(({ el }, i) => {
         setTimeout(() => {
-          box.classList.remove('visible');
-          setTimeout(() => box.remove(), 400);
+          el.classList.remove('visible');
+          setTimeout(() => el.remove(), 400);
         }, i * 60);
       });
     } else {
-      this.activeBoxes.forEach(box => box.remove());
+      this.activeBoxes.forEach(({ el }) => el.remove());
     }
     this.activeBoxes = [];
+    this._activeEngine = null;
   }
 
   /**

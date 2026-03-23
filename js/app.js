@@ -17,6 +17,7 @@ class PerceptionEngineApp {
     this.overlay = null;
     this.ui = null;
     this.targetInfo = null;
+    this._activeEngine = null;
   }
 
   /**
@@ -56,16 +57,33 @@ class PerceptionEngineApp {
       this.ui.returnToLanding();
     });
 
-    // 6. Start simulated target tracking
-    // In production, replace with real 8th Wall / MindAR tracking
+    // 6. Real MindAR image target tracking
+    const scanPrompt = document.getElementById('scanning-prompt');
+
     this.camera.onTargetFound((target) => {
       console.log(`[SPE] Target found: ${target.targetId}`);
       this.targetInfo = target;
+      if (scanPrompt) scanPrompt.style.display = 'none';
+      // If an engine is already active when the painting comes into view, render it
+      if (this._activeEngine) {
+        this.overlay.renderDetections(this._activeEngine, target);
+      }
     });
 
-    this.camera.simulateTargetTracking({ delay: 800 });
+    this.camera.onTargetLost(() => {
+      console.log('[SPE] Target lost');
+      this.targetInfo = null;
+      this.overlay.clearDetections(false);
+      if (scanPrompt && this._activeEngine) scanPrompt.style.display = 'block';
+    });
 
-    console.log('[SPE] Ready. Awaiting engine selection.');
+    // Per-frame position update — keeps boxes locked to the painting as camera moves
+    this.camera.onTargetUpdate((target) => {
+      this.targetInfo = target;
+      this.overlay.repositionBoxes(target);
+    });
+
+    console.log('[SPE] Ready. Point camera at the painting.');
   }
 
   /**
@@ -73,25 +91,19 @@ class PerceptionEngineApp {
    */
   _onEngineActivated(engine) {
     console.log(`[SPE] Engine activated: ${engine.name}`);
-
-    // Clear previous detections
+    this._activeEngine = engine;
     this.overlay.clearDetections(false);
 
-    // Render detections (after brief delay for lens transition)
+    // Only render if the painting is currently tracked
     if (this.targetInfo) {
       setTimeout(() => {
         this.overlay.renderDetections(engine, this.targetInfo);
       }, 300);
-    } else {
-      // No target yet — use default viewport positioning
-      const defaultTarget = {
-        targetId: 'simulated',
-        position: { x: 0, y: 0, z: -0.5 },
-        dimensions: { width: 80, height: 70 }
-      };
-      setTimeout(() => {
-        this.overlay.renderDetections(engine, defaultTarget);
-      }, 300);
+    }
+    // If painting not visible yet, show scanning prompt — boxes appear when onTargetFound fires
+    if (!this.targetInfo) {
+      const scanPrompt = document.getElementById('scanning-prompt');
+      if (scanPrompt) scanPrompt.style.display = 'block';
     }
   }
 

@@ -9,15 +9,15 @@
   <title>SELECT PERCEPTION ENGINE</title>
   <meta name="description" content="Speculative AI perception instrument — Bin Youn">
 
-  <!-- 
-    A-Frame (optional — uncomment for full WebXR support)
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    
-    8th Wall (optional — add your API key for real image tracking)
-    <script src="https://apps.8thwall.com/xrweb?appKey=YOUR_KEY"></script>
+  <!--
+    MindAR image tracking is loaded dynamically by camera-manager.js.
+    No manual script tag needed here.
 
-    MindAR (alternative lightweight image tracking)
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    IMPORTANT — before deploying, compile your painting image into targets.mind:
+    1. Go to: https://hiukim.github.io/mind-ar-js-doc/tools/compile/
+    2. Upload your painting image
+    3. Download targets.mind
+    4. Place targets.mind in the project root (same folder as index.html)
   -->
 
   <link rel="stylesheet" href="css/style.css">
@@ -41,6 +41,15 @@
     <div id="engine-list" class="engine-select-list" role="radiogroup" aria-label="Perception engine selection">
       <!-- Populated by ui-controller.js -->
     </div>
+  </div>
+
+  <!-- ==================== SCANNING PROMPT ==================== -->
+  <div id="scanning-prompt" style="
+    display:none; position:fixed; bottom:30%; left:50%; transform:translateX(-50%);
+    color:rgba(255,255,255,0.6); font-size:13px; letter-spacing:0.15em;
+    text-align:center; pointer-events:none; z-index:50;
+  ">
+    POINT AT THE PAINTING
   </div>
 
   <!-- ==================== AR HUD ==================== -->
